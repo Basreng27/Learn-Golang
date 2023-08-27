@@ -1,0 +1,173 @@
+//================================================== Package Database ==================================================
+/*
+    standar untuk mengkoneksikan kedalam database / mengakses
+    cara kerja = aplikasi -> database interface -> database driver -> DBMS (-> = memanggil(call))
+    install module untuk database : 
+*/
+
+//================================================== Database Driver ==================================================
+/*
+    Sebelum membuat program yang terkoneksi ke database harus menambahkan drivernya database terlebih dahulu
+    link : https://github.com/golang/go/wiki/SQLDrivers
+        yang paling populer yang atas karena ada 3 MySQL
+    menambahkan module : go get -u <link modulenya> / go get -u github.com/go-sql-driver/mysql
+    kemudian include package driver databasenya
+*/
+
+//================================================== Koneksi Ke Database ==================================================
+/*
+    menggunakan perintah : "sql.Open(driver,dataSourceName<lokasi port>)"
+    menggunakan driver msql
+    cara penulisan dataSourceName : "username:password@tcp(host:port)/database_name"
+    jika object sql.DB tidak di gunakan lagi maka di sarankan menutupnya dengan Close()
+*/
+
+//================================================== Database Pooling ==================================================
+/*
+    sql.DB bukanlah membuat Koneksi ke database
+    tetapi sebuah pool ke database
+    manajement database/ tidak perlu melaukan manajement Koneksi secara manual
+    menyediakan koneksi tambahan ketica pengguna banyak maka tidak perlu menunggu
+    pengaturan database Pooling
+        method : (DB) SetMaxIdleConns(number)
+        keterangan : pengaturan berapa jumlah koneksi minimal yang dibuat
+
+        method : (DB) SetMaxOpenConns(number)
+        keterangan : pengaturan berapa jumlah koneksi masimal yang dibuat
+
+        method : (DB) SetConnMaxIdleTime(duration)
+        keterangan : pengaturan berapa lama koneksi yang tidak digunakan akan dihapus
+
+        method : (DB) SetConnMaxLifetime(duration)
+        keterangan : pengaturan berapa lama koneksi boleh digunakan
+
+    contoh file : database.go
+*/
+
+//================================================== Eksekusi Perintah Sql ==================================================
+/*
+    menggunakan perintah : "(DB)ExecContext(Context, sql,params)"
+    kita bisa mengirim sinyal cancel ke database sama seperti context
+    contoh file : crud-sql_test.go
+*/
+
+//================================================== Query SQL ==================================================
+/*
+    untuk oprasi yang tidak membutuhkan hasil bisa menggunakan ExecContext
+    jika ingin result seperti select bisa menggunakan perintah : "(DB)QueryContext(context,sql,params)"
+
+    //Rows
+        hasil Query function adalah sebuah struct database
+        Rows digunakan untuk melaukan iterasi kepada hasil Query
+        bisa menggunakan perintah : "(Rows) Next()(Boolean)" //untuk melakukan iterasi terhadap data, jika hasilna false maka tidak ada data didalamnya
+        untuk membaca tiap data : "(Rows)Scan(columns...)"
+        jangan lupa untuk menutup Rows nya : "(Rows)Close()"
+*/
+
+//================================================== Tipe Data Column ==================================================
+/*
+    mapping tipe data :
+        Tipe data database : Varchar, Char
+        Tipe data golang : string
+
+        Tipe data database : INT, Bigint
+        Tipe data golang : int32,int64
+
+        Tipe data database : Float,Double
+        Tipe data golang : Float32, Float64
+
+        Tipe data database : Boolean
+        Tipe data golang : bool
+
+        Tipe data database : Date, DateTime, time, timestamp
+        Tipe data golang : time.Time
+
+        //error tipe data Date
+            harus di konversi
+            menggunakan : "parseTime=true"
+            tambahkan di get connection
+            seperti ini : "sql.Open("mysql", "root:@tcp(localhost:3306)/belajar-golang-database?parseTime=true")"
+
+        //nullable type
+            tipe data null atau kosong di database di golang tidak menegerti null
+            jika null di database maka akan jadi masalah saat melakukan scan
+            
+        //error data null
+            tipe data nullable:
+                tipe data golang : string
+                tipe data nullable : database/sql.NullString
+
+                tipe data golang : bool
+                tipe data nullable : database/sql.NullBool
+
+                tipe data golang : Float64
+                tipe data nullable : database/sql.NullFloat64
+
+                tipe data golang : int32
+                tipe data nullable : database/sql.NullInt32
+                
+                tipe data golang : int64
+                tipe data nullable : database/sql.Nullint64
+                
+                tipe data golang : time.Time
+                tipe data nullable : database/sql.NullTime
+
+*/
+
+//================================================== Sql Injection ==================================================
+/*
+    Sql dengan parameter
+    input lewat user dan menerima parameter
+
+    sql Injection = teknik yang menyalahgunakan celah keamanan
+    biasanya dilakukan dengan menggunakan perintah yang salah, menyebabkan hasil sql menjadi tida valid
+    bisa jadi tidak aman 
+
+    solusi jangan melakukan membuat Query secara manual dengan menggabungkan string secara bulat-bulat
+*/
+
+//================================================== Sql Dengan parameter ==================================================
+/*
+    bahanyanya sql injection jika menggbaungkan dengan kode lain
+    untuk menandai sebuah sql membutuhkan parameter bisa menggunakan : "?"
+    contoh :    select username from user where username =? and password =? limit 1
+                insert into user (username,password) values (?,?)
+                dll
+*/
+
+//================================================== Auto Increment ==================================================
+/*
+    kadang membuat data id auto increment
+    untuk mendapatkan id terkhir di input : "(result) LastInsertId()"
+    result adalah object
+*/
+
+//================================================== Prepare Statement ==================================================
+/*
+    saat menggunakan function Query atau exec sebenarnya menggunakan Prepare Statement
+    kadang ada kasus ingin melakukan insert data banyak sekaligus
+    pembuatan Prepare Statement bisa dilakukan dengan manual, tanpa harus menggunakan query atau exec
+    perintah : "(DB)Prepare(context,sql)"
+*/
+
+// ================================================== Database Transaction ==================================================
+/*
+    biasa digunakan untuk melakukan transakasi konsepnya saat proses aggal maka semua proses jalan
+    fitur andalan
+    bisa menggunakan fitur transaksi sehingga sql tidak dikirim secara otomatis
+    untuk memulai menggunakan perintah : "(DB)Begin" 
+    setelah selesai proses transaksi : "(Tx)Commit" untuk melakukan "Rollback()"
+*/
+
+// ================================================== Reppository Pattern ==================================================
+/*
+    patern yang cukup populer 
+    Pattern Reppository biasanya digunakan sebagai jembatan antara bussines logic aplikasi dengan semua perintah sql kedatabase
+    jadi semua perintah sql akan ditulis di Reppository sedangkan bussines logic kode program hanya cukup menggunakan Reppository tersebut
+    biasanya 1 Reppository sama dengan 1 tabel pada database atau 1 tabel punya 1 Reppository
+
+    //entity atau model 
+        karena golangbukan object maka di buat menjadi struct
+        mempermudah ketika membuat program
+         contoh ada di folder "entity" dan "Reppository"
+*/

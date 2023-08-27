@@ -1,0 +1,4 @@
+link interface : https://www.youtube.com/watch?v=ZC5D6CAKX7U&list=PL-CtdCApEFH_t5_dtCQZgWJqWF45WRgZw&index=35
+link interface kosong : https://www.youtube.com/watch?v=-YOAS_Suz_w&list=PL-CtdCApEFH_t5_dtCQZgWJqWF45WRgZw&index=36
+link nil : https://www.youtube.com/watch?v=UnhPMe9G9o4&list=PL-CtdCApEFH_t5_dtCQZgWJqWF45WRgZw&index=37
+link interface error : https://www.youtube.com/watch?v=REJkeC6MK4o&list=PL-CtdCApEFH_t5_dtCQZgWJqWF45WRgZw&index=38

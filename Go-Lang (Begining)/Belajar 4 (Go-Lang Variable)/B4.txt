@@ -1,0 +1,4 @@
+link variable = https://www.youtube.com/watch?v=vbTDLECgpZU&list=PL-CtdCApEFH_t5_dtCQZgWJqWF45WRgZw&index=6
+link constant = https://www.youtube.com/watch?v=AKrz7Gh3hw4&list=PL-CtdCApEFH_t5_dtCQZgWJqWF45WRgZw&index=7
+link conversi tipe data = https://www.youtube.com/watch?v=03f3rCDxhH0&list=PL-CtdCApEFH_t5_dtCQZgWJqWF45WRgZw&index=8
+link type deklarasi = https://www.youtube.com/watch?v=qWziDzKgMaw&list=PL-CtdCApEFH_t5_dtCQZgWJqWF45WRgZw&index=9

@@ -1,0 +1,233 @@
+link : https://www.youtube.com/watch?v=dpJhTYqWOrE
+
+//================================================== Concurrency dan Pararel Programming ==================================================
+//Pararel Programming
+/*
+lebih mudah membuat aplikasi pararel
+memecahkan masalah dengan cara membaginya menjadi masalah lebih kecil dan di jalankan secara bersamaan
+	contoh pararel : membuka beberapa aplikasi dalan 1 os seklaigus (misal yutube dan visual studi)
+		process dan thread (thread ada di dalam process)
+		process : process adalah sebuah eksekusi program
+			thread  : thread adalah segmen dari proses
+
+			process : process mengkonsumsi banyak memori
+			thread : thread menggunakan memori kecil
+
+			process : process saling terisolasi dengan process lain
+			thread : thread bisa saling berhubungan jika dalam proses yang sama
+
+			process : process lama unruk di jalankan
+			thread : thread cepat untuk di jalankan dan dihentikan
+*/
+
+//Pararel vs Concurency
+/*
+	berbeda dengan pararel (menjalankan beberapa pekerjaan secara bersamaan), concurency adalah menjalankan beberapa pekerjaan secara bergantian
+	dalam pararel kita membutuhkan banyak thread, sedangkan concurency hanya membutuhkan sedikit thread
+
+	contoh :
+		pararel : kegiatan A dan B dilakukan secara bersamaan seperti bersepedah dan berpikir
+		concurency : kegiatan A melakukan beberapa kali pergantian pekerjaan seperti manusia makan, minum, ngobrol, makan, minum, dst
+*/
+
+//CPU-Bound
+/*
+	contohnya :	membuat aplikasi yang berhubungan dengan machine learning
+	tapi tidak ada benefitnya jika menggunakan concurency, tapi bisa dibantu dengan implementasi pararel programing
+*/
+
+//I/O-Bound
+/*
+	contohnya : membaca data file, database, dll
+*/
+
+//================================================== Goroutines ==================================================
+/*
+	goroutines = thread ringanyang dikelola "go runtimes"
+	ukurannya sangat kecil sekitar 2kb, lebih kecil dari thread 1km atau 1000kb
+	goroutines berjalan secara concurencys
+
+	//cara kerja
+		goroutines dijalankan oleh "Go scheduler" dalam thread, dimana jumlah threadnya sebanyak "GOMAXPROCS" (biasanya sejumlah core CPU)
+		goroutines berjalan diatas thread
+		tidak perlu melakukan manajement thread manual, semua sudah diatur oleh "Go scheduler"
+
+	//terminologi
+		G : Goroutines
+		M : Thread (Machine)
+		P : Processor
+*/
+
+// memanggil goorutin hanya perlu menambahkan kata "go" sebelum functionnya di panggil ke goroutines
+//contoh ada di "goroutines_test.go"
+
+
+//================================================== Goroutines Sangat Ringan==================================================
+
+//================================================== Chanel ==================================================
+/*
+    chanel = tempat komunikasi secara sysnchronus
+    sama seperti goroutines akan tetapi bisa mengirim dan mengembalikan data
+    tempat penerimaan goroutin dan menunggu sampai data diterima oleh goroutine lainnya
+
+    karakteristik
+        chanel hanya mampu menampung 1 data, jika ingin menambah data lagi maka harus data yang ada dichanel  diambil
+        chanel hanya bisa menerima 1 jenis data
+        chanel bisa mengambil data lebih dari 1 Goroutines
+        chanel harus diclose jika tidak digunakan, atau bisa menyebabkan memory leak
+
+    membuat chanel
+        dipresentasikan dengan tipe data "chan" = chanel := make(chan string)
+        bisa menggunakan "make()" mirip seperti membuat map
+        saat pembuatan chanel harus menentukan tipe data apa yang akan dipakai kedalam chanel tersebut
+
+    mengirim dan menerima data chanel
+        chanel bisa digunakan untuk menerima dan mengirim data
+        untuk mengirim data bisa menggunakan kode = "chanel <- data"
+        untuk menerima bisa menggunakan kode = "data <- chanel"
+        jika sudah tutup menggunakan function "close()"
+*/
+
+//================================================== Chanel Sebagai Parameter ==================================================
+/*
+	seringkali mengirimkan chanel ke function lain melalui Parameter
+	jika ingin mengirim data asli melalui Parameter bisa menggunakan pointer (agar pass by reference)
+*/
+
+//================================================== Chanel In dan Out ==================================================
+/*
+	menandai chanel bahwa parameter hanya bisa mengirim data atau menerima data
+*/
+
+//================================================== Buffered Channel ==================================================
+/*
+	bisa digunakan untuk menampung data antrian di Channel
+
+	//Buffer Capacity
+		bebas memasukan jumlah kapasitas antrian dalan Buffer
+		jika diset 5 maka bisa menerima data 5
+		jikamengirim data 6 maka harus menunggu sampai ada buffer kosong
+		cocok ketika goroutine menerima data lebih lambat dan mengirim cepat
+*/
+
+//================================================== Range Channel ==================================================
+/*
+	ada kasus dimana channel di kirim data secara terus menerus
+	dan kadang tidak jelas kapan data tersebut akan berhenti diterima
+	salah satunya menggunakan perulangan menggunakan Range ketika menerima data dari channel
+	ketika channel di close otomatis channel tersebut berhenti
+	lebih sederhana daripada melakukan cek channel secara manual 
+*/
+
+//================================================== Select Channel ==================================================
+/*
+	ada kasus dimana membuat beberapa channel dan menjalankan goroutine
+	lalu ingin mendapatkan semua data dari channeltersebut
+	untuk melakukannya menggunakan Select channel di golang
+	dengan ini bisa memilih data tercepat dari beberapa channel jika datang secara bersamaan maka akan dipilih secara random
+*/
+
+//================================================== Default Select ==================================================
+/*
+	dalam select bisa menambahkan Default, dimana akan dieksekusi jika memang disemua chanel yang di select tidak ada datanya
+*/
+
+//================================================== Race Condition ==================================================
+/*
+	//masalah dengan goroutine
+		tidak berjalan secara concurency tapi bisa pararel
+		ini berbahaya ketika memanipulasi data variable yang sama oleh beberapa goroutine secara bersamaan
+		ini bisa menyebabkan masalah yang namnanya Race Condition
+*/
+
+//================================================== sync.Mutex ==================================================
+/*
+	Mutex (mutual exclusion)
+		untuk mengatasi masalah race Condition, terdapat sebuah strcut bernama "sync.Nutex"
+		mutex bisa dilakukan untuk unlocing dan locking.
+		sangat cocok untuk ada masalah race Condition 
+*/
+
+//================================================== sync.RWMutex ==================================================
+/*
+	RWMutex (Read Write Mutex)
+		ada kasus dimana ingin locking bukan hanya mengubah data tapi membaca data
+		untuk menangani hal ini mutex jenis ini memiliki 2 lock, unutk read dan untuk write 
+*/
+
+//================================================== Dead Lock ==================================================
+/*
+	Deadlock yaitu keadaan dimanasebuah proses goroutine saling menunggu lock sehingga tidak ada goroutine yang bisa jalankan
+*/
+
+//================================================== sync.WaitGroup ==================================================
+/*
+	fitur yang digunakan untuk menunggu proses diselesaikan
+	tidak direkomendasikan menggunakan sleep yang disarankan menggunakan WaitGroup
+	bisa menggunakan "Add(int)" jika goroutine selesai bisa menggunakan method "Done()"
+	untuk menunggu semua proses selesai bisa menggunakan method Wait()
+*/
+
+//================================================== sync.Once ==================================================
+/*
+	untuk memastikan sebuah function diekseusi 1x
+	goroutine lain akan diiraukan. atau function tidakakn dieksekusi lagi
+*/
+
+// ================================================== sync.Pool ==================================================
+/*
+	pool adalah implementasi design pattern bernama "object pool pattern"
+	pool digunakan untuk menyimpan data. menggunakan data,setelah selesai menggunakan datanya bisa kembali ke poolnya
+	sudah aman dari problem race Condition
+*/
+
+// ================================================== sync.Map ==================================================
+/*
+	perbedaan dengan map slice
+		store(key, value) = untuk menyimpan data ke Map
+		load(key) = mengambil data dari map menggunakan key
+		delete(key) = mengahpus data dari map menggunakan key
+		range(functio(key,value)) = melakukan iterasi seluruh data map
+*/
+
+// ================================================== sync.Cond ==================================================
+/*
+	cond = implementasi locking berbasis kondisi
+	"function signal()" bisa digunaan untukmemberitahu goroutin agar tidak menunggu, sedangkan function "Broadcast()" bisa digunaan untuk memberitahu semua goroutin agar tidak menunggu
+	untuk membuat cond bisa menggunakan perintah = "sync.NewCond(Locker)"
+*/
+
+// ================================================== Atomic ==================================================
+/*
+	package yang digunakan untuk untuk menggunakan data primitive secara aman pada proses concurent
+*/
+
+// ================================================== time.Time ==================================================
+/*
+	representasi suatu kejadian
+	ketika waktu timer sudah expiere makan event akan dikirim ke chanel
+	untuk membuat timer = "time.NewTimer(duration)"
+
+	//time.After()
+		hanya membutuhkan chanelnya saja
+		menggunakan = "time.After()"
+
+	//time.AfterFunc()
+*/
+
+// ================================================== time.Ticker ==================================================
+/*
+	representasi kejadian berulang
+	ketika tricker expiere maka event dikirim kedalam chanel
+	membuat tricer = "time.NewTricer(duration)"
+	untuk menghentikan = "Tricker.Stop()"
+
+	//time.Tick
+		tanpa menggunakan channel
+		kejadian berulang
+*/
+
+// ================================================== GOMAXPROCS ==================================================
+/*
+	jumlah CPU yang dimiliki = function runtime.NumCpu() //melitah brpa core laptop
+*/

@@ -1,0 +1,1094 @@
+//================================================== Setup Project ==================================================
+/*
+    Kita akan membuat aplikasi CRUD sederhana
+    Tujuannya untuk belajar RESTful API, bukan untuk membuat aplikasi
+    Kita akan membuat aplikasi CRUD untuk data category
+    Dimana data category memiliki atribut id (number) dan name (string)
+    Kita akan buat API untuk semua operasi nya, Create Category, Get Category, List Category, Update Category dan Delete Category
+    Semua API akan kita tambahkan Authentication berupa API-Key 
+
+    //Menambah Dependency
+        Driver MySQL : https://github.com/go-sql-driver/mysql //harus ditambahkan dulu go get -u github.com/go-sql-driver/mysql
+        HTTP Router : https://github.com/julienschmidt/httprouter 
+        Validation : https://github.com/go-playground/validator 
+*/
+
+//================================================== Membuat Open API ==================================================
+/*
+    tonton di udemy
+    specapi.json
+    {
+        "openapi": "3.0.3",
+        "info": {
+            "title": "Category ResfulAPI",
+            "description": "API Spec for category Restful API",
+            "version": "1.0.0"
+        },
+        "servers": [
+            {
+                "url": "http://localhost:3000/api"
+            }
+        ],
+        "paths": {
+        }
+    }
+*/
+
+//================================================== API Spec list/Get Category ==================================================
+/*
+    tonton di udemy
+    specapi.json
+    {
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Category ResfulAPI",
+        "description": "API Spec for category Restful API",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8080/api"
+        }
+    ],
+    "paths": {
+        "/categories": {
+            "get": {
+                "description": "List All categories",
+                "responses": {
+                    "200": {
+                        "description": "Success get all categories",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties": {
+                                        "type": "number"
+                                    },
+                                    "status": {
+                                        "type": "string"
+                                    },
+                                    "data": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "number"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+*/
+
+//================================================== API Spec Create Category ==================================================
+/*
+    tonton di udemy
+    specapi.json
+    {
+        "openapi": "3.0.3",
+        "info": {
+            "title": "Category ResfulAPI",
+            "description": "API Spec for category Restful API",
+            "version": "1.0.0"
+        },
+        "servers": [
+            {
+                "url": "http://localhost:8080/api"
+            }
+        ],
+        "paths": {
+            "/categories": {
+                "get": {
+                    "tags":["Category API"],
+                    "description": "List All categories",
+                    "summary": "List All Category",
+                    "responses": {
+                        "200": {
+                            "description": "Success get all categories",
+                            "content":{
+                                "application/json":{
+                                    "schema":{
+                                        "type": "object",
+                                        "properties": {
+                                            "type": "number"
+                                        },
+                                        "status": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Category"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "post": {
+                    "tags":["Category API"],
+                    "description": "Create New Category",
+                    "summary": "Create New Category",
+                    "requestBody":{
+                        "content":{
+                            "application/json": {
+                                "schema":{
+                                    "type": "object",
+                                    "properties":{
+                                        "name": {
+                                            "type": "string"
+                                        } 
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "200": {
+                            "description": "Success Create Category",
+                            "content":{
+                                "application/json":{
+                                    "schema":{
+                                        "type":"object",
+                                        "properties":{
+                                            "code":{
+                                                "type":"number"
+                                            },
+                                            "status":{
+                                                "type":"string"
+                                            },
+                                            "data":{     
+                                                "$ref": "#/components/schemas/Category"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "components":{
+            "schemas":{
+                "Catergory":{
+                    "type":"object",
+                    "properties":{
+                        "id":{
+                            "type":"number"
+                        },
+                        "name":{
+                            "type":"string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+*/
+
+//================================================== API Spec Get Category/By Id ==================================================
+/*
+    tonton di udemy
+    specapi.json
+    {
+        "openapi": "3.0.3",
+        "info": {
+            "title": "Category ResfulAPI",
+            "description": "API Spec for category Restful API",
+            "version": "1.0.0"
+        },
+        "servers": [
+            {
+                "url": "http://localhost:8080/api"
+            }
+        ],
+        "paths": {
+            "/categories": {
+                "get": {
+                    "tags":["Category API"],
+                    "description": "List All categories",
+                    "summary": "List All Category",
+                    "responses": {
+                        "200": {
+                            "description": "Success get all categories",
+                            "content":{
+                                "application/json":{
+                                    "schema":{
+                                        "type": "object",
+                                        "properties": {
+                                            "type": "number"
+                                        },
+                                        "status": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Category"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "post": {
+                    "tags":["Category API"],
+                    "description": "Create New Category",
+                    "summary": "Create New Category",
+                    "requestBody":{
+                        "content":{
+                            "application/json": {
+                                "schema":{
+                                    "type": "object",
+                                    "properties":{
+                                        "name": {
+                                            "type": "string"
+                                        } 
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "200": {
+                            "description": "Success Create Category",
+                            "content":{
+                                "application/json":{
+                                    "schema":{
+                                        "type":"object",
+                                        "properties":{
+                                            "code":{
+                                                "type":"number"
+                                            },
+                                            "status":{
+                                                "type":"string"
+                                            },
+                                            "data":{     
+                                                "$ref": "#/components/schemas/Category"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "/categories/{categoryId}":{
+                "get":{
+                    "tags":["Category API Have Parameters"],
+                    "summary":"Get Category By Id",
+                    "description":"Get Category By Id",
+                    "parameters":[
+                        {
+                            "name":"categoryId",
+                            "in": "path",
+                            "description":"Category Id"
+                        }
+                    ],
+                    "responses":{
+                        "200":{
+                            "description":"Success Get Category By Id",
+                            "content":{
+                                "application/json":{
+                                    "schema":{
+                                        "type":"object",
+                                        "properties":{
+                                            "code":{
+                                                "type":"number"
+                                            },
+                                            "status":{
+                                                "type":"string"
+                                            },
+                                            "data":{     
+                                                "$ref": "#/components/schemas/Category"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "components":{
+            "schemas":{
+                "Catergory":{
+                    "type":"object",
+                    "properties":{
+                        "id":{
+                            "type":"number"
+                        },
+                        "name":{
+                            "type":"string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+*/
+
+//================================================== API Spec Update Category/By Id ==================================================
+/*
+    tonton di udemy
+    specapi.json
+    {
+        "openapi": "3.0.3",
+        "info": {
+            "title": "Category ResfulAPI",
+            "description": "API Spec for category Restful API",
+            "version": "1.0.0"
+        },
+        "servers": [
+            {
+                "url": "http://localhost:8080/api"
+            }
+        ],
+        "paths": {
+            "/categories": {
+                "get": {
+                    "tags":["Category API"],
+                    "description": "List All categories",
+                    "summary": "List All Category",
+                    "responses": {
+                        "200": {
+                            "description": "Success get all categories",
+                            "content":{
+                                "application/json":{
+                                    "schema":{
+                                        "type": "object",
+                                        "properties": {
+                                            "type": "number"
+                                        },
+                                        "status": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Category"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "post": {
+                    "tags":["Category API"],
+                    "description": "Create New Category",
+                    "summary": "Create New Category",
+                    "requestBody":{
+                        "content":{
+                            "application/json": {
+                                "schema":{
+                                    "$ref": "#/components/schemas/CreateOrUpdateCategory"
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "200": {
+                            "description": "Success Create Category",
+                            "content":{
+                                "application/json":{
+                                    "schema":{
+                                        "type":"object",
+                                        "properties":{
+                                            "code":{
+                                                "type":"number"
+                                            },
+                                            "status":{
+                                                "type":"string"
+                                            },
+                                            "data":{     
+                                                "$ref": "#/components/schemas/Category"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "/categories/{categoryId}":{
+                "get":{
+                    "tags":["Category API Have Parameters"],
+                    "summary":"Get Category By Id",
+                    "description":"Get Category By Id",
+                    "parameters":[
+                        {
+                            "name":"categoryId",
+                            "in": "path",
+                            "description":"Category Id"
+                        }
+                    ],
+                    "responses":{
+                        "200":{
+                            "description":"Success Get Category By Id",
+                            "content":{
+                                "application/json":{
+                                    "schema":{
+                                        "type":"object",
+                                        "properties":{
+                                            "code":{
+                                                "type":"number"
+                                            },
+                                            "status":{
+                                                "type":"string"
+                                            },
+                                            "data":{     
+                                                "$ref": "#/components/schemas/Category"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "put":{
+                    "tags":["Update API Have Parameters"],
+                    "summary":"Update Category By Id",
+                    "description":"Update Category By Id",
+                    "parameters":[
+                        {
+                            "name":"categoryId",
+                            "in": "path",
+                            "description":"Category Id"
+                        }
+                    ],
+                    "requestBody":{
+                        "content":{
+                            "application/json": {
+                                "schema":{
+                                    "$ref": "#/components/schemas/CreateOrUpdateCategory"
+                                }
+                            }
+                        }
+                    },
+                    "responses":{
+                        "200":{
+                            "description":"Success Get Category By Id",
+                            "content":{
+                                "application/json":{
+                                    "schema":{
+                                        "type":"object",
+                                        "properties":{
+                                            "code":{
+                                                "type":"number"
+                                            },
+                                            "status":{
+                                                "type":"string"
+                                            },
+                                            "data":{     
+                                                "$ref": "#/components/schemas/Category"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "components":{
+            "schemas":{
+                "CreatOrUpdateCategory":{
+                    "type":"object",
+                    "properties":{
+                        "name":{
+                            "type":"string"
+                        }
+                    }
+                },
+                "Catergory":{
+                    "type":"object",
+                    "properties":{
+                        "id":{
+                            "type":"number"
+                        },
+                        "name":{
+                            "type":"string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+*/
+
+//================================================== API Spec Delete Category/By Id ==================================================
+/*
+    tonton di udemy
+    specapi.json
+    {
+        "openapi": "3.0.3",
+        "info": {
+            "title": "Category ResfulAPI",
+            "description": "API Spec for category Restful API",
+            "version": "1.0.0"
+        },
+        "servers": [
+            {
+                "url": "http://localhost:8080/api"
+            }
+        ],
+        "paths": {
+            "/categories": {
+                "get": {
+                    "tags":["Category API"],
+                    "description": "List All categories",
+                    "summary": "List All Category",
+                    "responses": {
+                        "200": {
+                            "description": "Success get all categories",
+                            "content":{
+                                "application/json":{
+                                    "schema":{
+                                        "type": "object",
+                                        "properties": {
+                                            "type": "number"
+                                        },
+                                        "status": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Category"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "post": {
+                    "tags":["Category API"],
+                    "description": "Create New Category",
+                    "summary": "Create New Category",
+                    "requestBody":{
+                        "content":{
+                            "application/json": {
+                                "schema":{
+                                    "$ref": "#/components/schemas/CreateOrUpdateCategory"
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "200": {
+                            "description": "Success Create Category",
+                            "content":{
+                                "application/json":{
+                                    "schema":{
+                                        "type":"object",
+                                        "properties":{
+                                            "code":{
+                                                "type":"number"
+                                            },
+                                            "status":{
+                                                "type":"string"
+                                            },
+                                            "data":{     
+                                                "$ref": "#/components/schemas/Category"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "/categories/{categoryId}":{
+                "get":{
+                    "tags":["Category API Have Parameters"],
+                    "summary":"Get Category By Id",
+                    "description":"Get Category By Id",
+                    "parameters":[
+                        {
+                            "name":"categoryId",
+                            "in": "path",
+                            "description":"Category Id"
+                        }
+                    ],
+                    "responses":{
+                        "200":{
+                            "description":"Success Get Category By Id",
+                            "content":{
+                                "application/json":{
+                                    "schema":{
+                                        "type":"object",
+                                        "properties":{
+                                            "code":{
+                                                "type":"number"
+                                            },
+                                            "status":{
+                                                "type":"string"
+                                            },
+                                            "data":{     
+                                                "$ref": "#/components/schemas/Category"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "put":{
+                    "tags":["Update API Have Parameters"],
+                    "summary":"Update Category By Id",
+                    "description":"Update Category By Id",
+                    "parameters":[
+                        {
+                            "name":"categoryId",
+                            "in": "path",
+                            "description":"Category Id"
+                        }
+                    ],
+                    "requestBody":{
+                        "content":{
+                            "application/json": {
+                                "schema":{
+                                    "$ref": "#/components/schemas/CreateOrUpdateCategory"
+                                }
+                            }
+                        }
+                    },
+                    "responses":{
+                        "200":{
+                            "description":"Success Get Category By Id",
+                            "content":{
+                                "application/json":{
+                                    "schema":{
+                                        "type":"object",
+                                        "properties":{
+                                            "code":{
+                                                "type":"number"
+                                            },
+                                            "status":{
+                                                "type":"string"
+                                            },
+                                            "data":{     
+                                                "$ref": "#/components/schemas/Category"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "delete":{
+                    
+                    "tags":["Category API Have Parameters"],
+                    "summary":"Delete Category By Id",
+                    "description":"Delete Category By Id",
+                    "parameters":[
+                        {
+                            "name":"categoryId",
+                            "in": "path",
+                            "description":"Category Id"
+                        }
+                    ],
+                    "responses":{
+                        "200":{
+                            "description":"Success Delete Category By Id",
+                            "content":{
+                                "application/json":{
+                                    "schema":{
+                                        "type":"object",
+                                        "properties":{
+                                            "code":{
+                                                "type":"number"
+                                            },
+                                            "status":{
+                                                "type":"string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "components":{
+            "schemas":{
+                "CreatOrUpdateCategory":{
+                    "type":"object",
+                    "properties":{
+                        "name":{
+                            "type":"string"
+                        }
+                    }
+                },
+                "Catergory":{
+                    "type":"object",
+                    "properties":{
+                        "id":{
+                            "type":"number"
+                        },
+                        "name":{
+                            "type":"string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+*/
+
+//================================================== API Spec Securitty ==================================================
+/*
+    tonton di udemy
+    specapi.json
+    {
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Category RESTful API",
+        "description": "API Spec for Category RESTful API",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+        "url": "http://localhost:3000/api"
+        }
+    ],
+    "paths": {
+        "/categories": {
+        "get": {
+            "security": [{
+            "CategoryAuth" : []
+            }],
+            "tags": [
+            "Category API"
+            ],
+            "description": "List all Categories",
+            "summary": "List all Categories",
+            "responses": {
+            "200": {
+                "description": "Success get all categories",
+                "content": {
+                "application/json": {
+                    "schema": {
+                    "type": "object",
+                    "properties": {
+                        "code": {
+                        "type": "number"
+                        },
+                        "status": {
+                        "type": "string"
+                        },
+                        "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Category"
+                        }
+                        }
+                    }
+                    }
+                }
+                }
+            }
+            }
+        },
+        "post": {
+            "security": [{
+            "CategoryAuth" : []
+            }],
+            "tags": ["Category API"],
+            "description": "Create new Category",
+            "summary": "Create new Category",
+            "requestBody": {
+            "content": {
+                "application/json": {
+                "schema": {
+                    "$ref": "#/components/schemas/CreateOrUpdateCategory"
+                }
+                }
+            }
+            },
+            "responses": {
+            "200": {
+                "description": "Success Create Category",
+                "content": {
+                "application/json": {
+                    "schema": {
+                    "type": "object",
+                    "properties": {
+                        "code" : {
+                        "type": "number"
+                        },
+                        "status" : {
+                        "type": "string"
+                        },
+                        "data" : {
+                        "$ref": "#/components/schemas/Category"
+                        }
+                    }
+                    }
+                }
+                }
+            }
+            }
+        }
+        },
+        "/categories/{categoryId}" : {
+        "get" : {
+            "security": [{
+            "CategoryAuth" : []
+            }],
+            "tags": ["Category API"],
+            "summary": "Get category by Id",
+            "description": "Get category by id",
+            "parameters": [
+            {
+                "name": "categoryId",
+                "in": "path",
+                "description": "Category Id"
+            }
+            ],
+            "responses": {
+            "200" : {
+                "description": "Success get category",
+                "content": {
+                "application/json": {
+                    "schema": {
+                    "type": "object",
+                    "properties": {
+                        "code" : {
+                        "type": "number"
+                        },
+                        "status" : {
+                        "type": "string"
+                        },
+                        "data" : {
+                        "$ref": "#/components/schemas/Category"
+                        }
+                    }
+                    }
+                }
+                }
+            }
+            }
+        },
+        "put" : {
+            "security": [{
+            "CategoryAuth" : []
+            }],
+            "tags": ["Category API"],
+            "summary": "Update category by Id",
+            "description": "Update category by Id",
+            "parameters": [
+            {
+                "name": "categoryId",
+                "in": "path",
+                "description": "Category Id"
+            }
+            ],
+            "requestBody": {
+            "content": {
+                "application/json": {
+                "schema": {
+                    "$ref": "#/components/schemas/CreateOrUpdateCategory"
+                }
+                }
+            }
+            },
+            "responses": {
+            "200" : {
+                "description": "Success get category",
+                "content": {
+                "application/json": {
+                    "schema": {
+                    "type": "object",
+                    "properties": {
+                        "code" : {
+                        "type": "number"
+                        },
+                        "status" : {
+                        "type": "string"
+                        },
+                        "data" : {
+                        "$ref": "#/components/schemas/Category"
+                        }
+                    }
+                    }
+                }
+                }
+            }
+            }
+        },
+        "delete": {
+            "security": [{
+            "CategoryAuth" : []
+            }],
+            "tags": ["Category API"],
+            "summary": "Delete category by Id",
+            "description": "Delete category by id",
+            "parameters": [
+            {
+                "name": "categoryId",
+                "in": "path",
+                "description": "Category Id"
+            }
+            ],
+            "responses": {
+            "200" : {
+                "description": "Success delete category",
+                "content": {
+                "application/json": {
+                    "schema": {
+                    "type": "object",
+                    "properties": {
+                        "code" : {
+                        "type": "number"
+                        },
+                        "status" : {
+                        "type": "string"
+                        }
+                    }
+                    }
+                }
+                }
+            }
+            }
+        }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+        "CategoryAuth" : {
+            "type": "apiKey",
+            "in" : "header",
+            "name": "X-API-Key",
+            "description": "Authentication for Category API"
+        }
+        },
+        "schemas": {
+        "CreateOrUpdateCategory" : {
+            "type": "object",
+            "properties": {
+            "name": {
+                "type": "string"
+            }
+            }
+        },
+        "Category" : {
+            "type": "object",
+            "properties": {
+            "id": {
+                "type": "number"
+            },
+            "name": {
+                "type": "string"
+            }
+            }
+        }
+        }
+    }
+    }
+*/
+
+//================================================== Membuat Database ==================================================
+/*
+    tonton di udemy
+    menggunakna MySQL
+*/
+
+//================================================== Category Domain ==================================================
+/*
+    tonton di udemy
+    data model
+    model bisa di isikan folder web,api
+    folder model/domain/category.go
+*/
+
+//================================================== Category Repositoy ==================================================
+/*
+    tonton di udemy
+    folder repository/category_repository.go
+*/
+
+//================================================== Category Repositoy Implementation ==================================================
+/*
+    tonton di udemy
+    folder repository/category_repository_implementation.go
+*/
+
+//================================================== Category Service ==================================================
+/*
+    tonton di udemy
+    bisnis logic    
+    folder service/category_service.go dan folder model/web/...
+*/
+
+//================================================== Category Service Implementation ==================================================
+/*
+    tonton di udemy
+    bisnis logic    
+    folder service/category_service_implementation.go dan folder model/web/...
+*/
+
+//================================================== Category Validation ==================================================
+/*
+    tonton di udemy
+    pengecekan jika nama kosong dan panjangnya menggunakan library Validation
+    folder service/category_service_implementation.go dan folder model/web/...
+*/
+
+//================================================== Category Controller ==================================================
+/*
+    tonton di udemy
+    folder controller/category_controller.go
+*/
+
+//================================================== Category Controller Implementation ==================================================
+/*
+    tonton di udemy
+    folder controller/category_controller_implementation.go
+*/
+
+//================================================== httprouter ==================================================
+/*
+    tonton di udemy
+    main.go //isinya router
+*/
+
+//================================================== http server ==================================================
+/*
+    app/
+*/
+
+//================================================== Test ==================================================
+/*
+    membuat unitest
+*/

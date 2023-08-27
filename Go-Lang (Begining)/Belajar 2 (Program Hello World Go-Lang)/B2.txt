@@ -1,0 +1,18 @@
+link : https://www.youtube.com/watch?v=sDHZbPfrNoM&list=PL-CtdCApEFH_t5_dtCQZgWJqWF45WRgZw&index=2
+link Belajar dari awal bikin file  : https://dasarpemrogramangolang.novalagung.com/A-setup-go-project-dengan-go-modules.html
+
+untuk menjalankan filenya terlebihdahulu harus menggunakan perintah pada terminal
+
+go comand
+	go mod init <nama project> =  digunakan untuk inisialisasi project pada Go (menggunakan Go Modules). Untuk nama project bisa menggunakan apapun, tapi umumnya adalah disamakan dengan nama direktori.
+	go run <file .go> = digunakan untuk eksekusi file program (file ber-ekstensi .go). Cara penggunaannya dengan menuliskan command tersebut diikuti argumen nama file.
+	go build = command ini menghasilkan file executable atau binary pada folder yang sedang aktif. 
+perintah
+	buat folder di tetrminal
+	mkdir <nama folder> = untuk membuat folder
+	cd <nama folder> = masuk kedalam folder
+	go mod init <nama project> = File ini digunakan oleh Go toolchain untuk menandai bahwa folder di mana file tersebut berada adalah folder project. Jadi jangan di hapus ya file tersebut.
+	ls -l = untuk mengecek ada file apa saja
+	go build <nama file>.go = untuk membuild file terlebih dahulu menjadi .exe
+	./<nama file> = mengeksekusi file
+	

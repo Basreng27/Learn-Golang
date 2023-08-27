@@ -1,0 +1,14 @@
+link modules : https://www.youtube.com/watch?v=JOXbresHhIk
+
+modules : sebelum ada module menggunakan GOPATH
+	Go-Modules :dikenalkan di versi 1.11 dan 1.12
+				bisa membuat project dengan mudah dan dependency management sangat mudah
+				//di php sama seperti composer	
+	
+	membuat module :go mod init <nama project>
+					maka akan secara otomatis membuat file "go.mod" yang isinya informasi nama module dan versi golang
+					golang terintegrasi baik dengan git
+					untuk merilis module hanya perlu membuat Tag di Git
+					
+	untuk membuat module dari github menggunakan perintah : go mod init <link repo di github yang akan di jadikan module> (modulenya ada di github)
+	untuk merilis module di github harus menggunakan "v" di depan : "git tag v'Versinya(1.0.0)'" lalu push saja

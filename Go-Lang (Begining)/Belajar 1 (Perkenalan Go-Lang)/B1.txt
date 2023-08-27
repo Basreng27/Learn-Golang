@@ -1,0 +1,7 @@
+link : https://www.youtube.com/watch?v=nyGu8Xn5b3g&list=PL-CtdCApEFH_t5_dtCQZgWJqWF45WRgZw
+
+Download golang : https://go.dev/dl/
+setelah download langsung di install
+lalu cek di terminal/cmd dengan perintah "go version"
+jika terinstall : go version go1.19 windows/amd64
+jika ada sudah terinstall kalau tidak muncul berarti belum terinstall

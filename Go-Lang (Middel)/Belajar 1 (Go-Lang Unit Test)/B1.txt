@@ -1,0 +1,16 @@
+link golang unit test : https://www.youtube.com/watch?v=t9QJPE5vwhs
+
+Software testing 	: adalah disiplin ilmu dalam software wngineering
+			Tujuan 	: memastikan kualitas kode dan apliasi berjalan baik
+		
+		test pyramid : Unit -> Service -> UI (Segitiga dari unit keatas(semakin bawah semakin murah)(semakin atas semakin lama kebawah cepat))
+		
+			UI Test / edn to end test : biasanya testing menyeluruh dari frontend ke backend ke database atau sistem lainnya seperti payment gateway
+			service test / integration test : biasanya testing backend yang langsung di test adalah API nya
+			contoh internal architecture apliasi : client -> controller -> service -> repository -> database
+			unit test : hanya mengetes pecahannya seperti mengetest controllernya saja
+			
+Pengenalan testing package : packagenya bernama testing
+	perintah :	testing.T = struct ini digunakan untuk unit test di golang
+				testing.M = untuk mengatur life cycle testing / menentukan alur testing
+				testing.B = untuk melakukan benchmarking(mengukur kecepatan program)

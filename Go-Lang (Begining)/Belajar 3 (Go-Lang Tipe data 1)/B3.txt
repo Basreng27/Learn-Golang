@@ -1,0 +1,3 @@
+link tipe data Nummber : https://www.youtube.com/watch?v=eZO2DMQepns&list=PL-CtdCApEFH_t5_dtCQZgWJqWF45WRgZw&index=3
+link tipe data Boolean : https://www.youtube.com/watch?v=RgufJoZ4idA&list=PL-CtdCApEFH_t5_dtCQZgWJqWF45WRgZw&index=4
+link tipe data String : https://www.youtube.com/watch?v=xz-CBXIjfd8&list=PL-CtdCApEFH_t5_dtCQZgWJqWF45WRgZw&index=5

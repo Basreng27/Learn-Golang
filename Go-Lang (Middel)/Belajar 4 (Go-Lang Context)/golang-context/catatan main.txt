@@ -1,0 +1,64 @@
+//================================================== Context ==================================================
+/*
+    Context = data yang membawa :   Value
+                                    sinyal cancel
+                                    sinyal timeout
+                                    sinyal deadline
+    biasanya dibuat perrequest
+    digunakan untuk mempermudah meneruskan Value dan sinyal antar proses
+        dari goroutine 1 ke yang lainnya
+        ketika ingin membatalkan suatu proses maka tinggal mengirimkan sinyal cancelnya, maka otomatis akan membatalkan proses yang lainnya
+    hampir semua bagian memanfaatkan Context seperti :  database
+                                                        http server
+                                                        http client
+                                                        dll
+    context sama seperti interface
+
+    //membuat context
+        karena context adalah sebuah interface, maka membuat context butuh sebuah struct yang sesuai dengan kontrak interface context
+        tidak perlu membuat secara manual
+        untuk membuat context : 
+            function : context.Background()
+            keterangan : membuat context kosong(biasanya digunakan di function main atau dalam test atau request)
+
+            function : context.TODO()
+            keterangan : membuat context kosong seperti Background, namun biasanya menggunakan ini ketika belum jelas context apa yang digunakan 
+*/
+
+// ================================================== Parent and Child Context ==================================================
+/*
+    context menganut konsep Parent and Child
+    artinya saat mebuat context dapat membuat child context dari context yang sudah ada atau Parent
+    Parent context dapat memiliki banyak child tapi child hanya punya satu Parent
+    konsep yang sama dengan pewarisan dipemrograman berorientasi object
+    bersifat imutable 
+        jika membuat conteks tidak akan bisa dirubah
+*/
+
+// ================================================== Context with Value ==================================================
+/*
+    awal dibuat tidak memounyai Value
+    bisa menambahkan data berupa pair(key - value)
+    saat menambah context otomatis membuat child baru dan original context tidak akan berubah
+    bisa menggunakan : function "context.WithValue(Parent,key,value)" 
+*/
+
+// ================================================== Context with Cancel ==================================================
+/*
+    bisa menambah sinyal cancel atau pembatalan
+    bisa menggunakan perintah : "context.WithCancel(Parent)"
+*/
+
+// ================================================== Context with Timeout ==================================================
+/*
+    menambah sinyal secara otomatis menggunakan pengaturan timeout
+    perintah : "context.WithTimeout(Parent,duration)"
+    sangat cocok koneksi ke database atau API
+*/
+
+// ================================================== Context with Deadline ==================================================
+/*
+    bisa menggunakan deadline untuk cancel otomatis
+    bisa ditentukan waktu timeoutnya misalkan jam 12 siang
+    perintah : "context.WithDeadline(Parent,time)"
+*/

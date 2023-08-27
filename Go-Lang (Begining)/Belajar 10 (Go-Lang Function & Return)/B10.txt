@@ -1,0 +1,10 @@
+link function : https://www.youtube.com/watch?v=FLWVZwLui40&list=PL-CtdCApEFH_t5_dtCQZgWJqWF45WRgZw&index=20
+link function parameter : https://www.youtube.com/watch?v=hwcTT9NDm-k&list=PL-CtdCApEFH_t5_dtCQZgWJqWF45WRgZw&index=21
+link function return value : https://www.youtube.com/watch?v=QfC5DmFhgkA&list=PL-CtdCApEFH_t5_dtCQZgWJqWF45WRgZw&index=22
+link Function Returning Multiple Values : https://www.youtube.com/watch?v=_LsQPjARGI4&list=PL-CtdCApEFH_t5_dtCQZgWJqWF45WRgZw&index=23
+link Named Return Values : https://www.youtube.com/watch?v=u0CXlyXdFNM&list=PL-CtdCApEFH_t5_dtCQZgWJqWF45WRgZw&index=24
+link Variadic Function : https://www.youtube.com/watch?v=JAcip3gzfkI&list=PL-CtdCApEFH_t5_dtCQZgWJqWF45WRgZw&index=25
+link Function Value : https://www.youtube.com/watch?v=WwJuzTkv6ck&list=PL-CtdCApEFH_t5_dtCQZgWJqWF45WRgZw&index=26
+link Function As Parameter : https://www.youtube.com/watch?v=U_mwda3Tf_c&list=PL-CtdCApEFH_t5_dtCQZgWJqWF45WRgZw&index=27
+link Anonymous Function : https://www.youtube.com/watch?v=b9Mcv02tmQk&list=PL-CtdCApEFH_t5_dtCQZgWJqWF45WRgZw&index=28
+link Recursive Function : https://www.youtube.com/watch?v=KgUidUhp8XQ&list=PL-CtdCApEFH_t5_dtCQZgWJqWF45WRgZw&index=29

@@ -1,0 +1,36 @@
+//============================================= Golang Embed =============================================
+//============================================= Embed Package =============================================
+/*
+    Embed Package
+    mempermudah membaca isi file pada saat compile time secara otomatis dimasukkan isi filenya kedalam variable
+    bisa mengeksport packagenya dulu
+    tidak bisa membuat golang embed di dalam function
+*/
+
+//============================================= Embed File Ke String =============================================
+/*
+    embed file bisa ke tipe data String
+    secara otomatis file akan dibaca sebagai text dan masukan kevariable tersebut
+    harus ada commet sebelum variable : //go:embed version.txt 
+                                        var version string
+*/
+
+//============================================= Embed File Ke []Byte =============================================
+/*
+    cocok sekali jika ingin melakukan embed dalam betuk binary, seperti gambar dll
+*/
+
+// ================================================== Embed Multiple Files ==================================================
+/*
+    embed beberapa file sekaligus
+    bisa dilakukan menggunakan embed packagenya
+    bisa menambahkan komentar //go:embed lebih dari sekali
+    variablenya menggunakan tipe data "embed.FS"
+*/
+
+// ================================================== Path Matcher ==================================================
+/*
+    bisa mengggunakan Path Matcher untuk membaca Multiple file
+    sangat cocok ketika pola jenis file yang dimiliki
+    menggunakan : path.Match
+*/

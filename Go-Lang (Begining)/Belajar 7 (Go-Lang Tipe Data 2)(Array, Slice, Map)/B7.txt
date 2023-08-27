@@ -1,0 +1,3 @@
+link array : https://www.youtube.com/watch?v=HK_lBa6iOiU&list=PL-CtdCApEFH_t5_dtCQZgWJqWF45WRgZw&index=13
+link slice : https://www.youtube.com/watch?v=ktrz4BCq-jM&list=PL-CtdCApEFH_t5_dtCQZgWJqWF45WRgZw&index=14
+link map : https://www.youtube.com/watch?v=_4w2QxintH4&list=PL-CtdCApEFH_t5_dtCQZgWJqWF45WRgZw&index=15
